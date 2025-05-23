@@ -1,14 +1,8 @@
 name: Target Repo Workflow
 
 on:
-  workflow_dispatch:
-    inputs:
-      service:
-        description: "Service name"
-        required: true
-      version:
-        description: "Version number"
-        required: true
+  repository_dispatch:
+    types: [trigger-workflow]
 
 jobs:
   process-trigger:
@@ -20,10 +14,10 @@ jobs:
 
       - name: Debug Received Inputs
         run: |
-          echo "Received Service: ${{ github.event.inputs.service }}"
-          echo "Received Version: ${{ github.event.inputs.version }}"
+          echo "Received Service: ${{ github.event.client_payload.service }}"
+          echo "Received Version: ${{ github.event.client_payload.version }}"
 
       - name: Run Deployment Tasks (Example)
         run: |
-          echo "Deploying service: ${{ github.event.inputs.service }} with version: ${{ github.event.inputs.version }}"
+          echo "Deploying service: ${{ github.event.client_payload.service }} with version: ${{ github.event.client_payload.version }}"
           # Add deployment commands here (e.g., Docker, Kubernetes)
