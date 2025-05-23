@@ -1,17 +1,29 @@
-name: My Target Workflow
+name: Target Repo Workflow
 
 on:
-  repository_dispatch:
-    types: [trigger-workflow]
-    
+  workflow_dispatch:
+    inputs:
+      service:
+        description: "Service name"
+        required: true
+      version:
+        description: "Version number"
+        required: true
+
 jobs:
-  build:
+  process-trigger:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-        ref: ${{ github.event.client_payload.sha }}
 
-      # Add your workflow steps here
+      - name: Debug Received Inputs
+        run: |
+          echo "Received Service: ${{ github.event.inputs.service }}"
+          echo "Received Version: ${{ github.event.inputs.version }}"
+
+      - name: Run Deployment Tasks (Example)
+        run: |
+          echo "Deploying service: ${{ github.event.inputs.service }} with version: ${{ github.event.inputs.version }}"
+          # Add deployment commands here (e.g., Docker, Kubernetes)
